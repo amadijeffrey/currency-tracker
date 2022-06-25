@@ -8,6 +8,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"os"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -115,8 +116,12 @@ func main() {
 	r := mux.NewRouter()
 	handlers.AllowedOrigins([]string{"*"})
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default port if not specified
+	}
 	server := &http.Server{
-		Addr:         ":8080",
+		Addr:         ":" + port,
 		Handler:      handlers.CORS()(r),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 5 * time.Second,
